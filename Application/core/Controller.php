@@ -32,16 +32,23 @@ class Controller
   */
   public function view(string $view, $data = [])
   {
+    if (isset($_SESSION['redirect_data'])) {
+      $data = array_merge($data, $_SESSION['redirect_data']);
+      unset($_SESSION['redirect_data']);
+    }
     require '../Application/views/' . $view . '.php';
 
   }
 
-  public function redirect(string $url)
+  public function redirect(string $url, array $data = [])
   {
-      $baseURL = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-      $fullURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
-      header('Location: ' . $fullURL);
-      exit();
+    if (!empty($data)) {
+      $_SESSION['redirect_data'] = $data;
+    }
+    $baseURL = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+    $fullURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
+    header('Location: ' . $fullURL);
+    exit();
   }
 
   /**

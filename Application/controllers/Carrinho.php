@@ -1,23 +1,60 @@
 <?php
-
+ 
 use Application\core\Controller;
 
 class Carrinho extends Controller
 {
+
+  public function remover($id)
+  {
+    if (isset($_SESSION['carrinho']) && is_array($_SESSION['carrinho'])) {
+      $key = array_search($id, $_SESSION['carrinho']);
+      if ($key !== false) {
+        unset($_SESSION['carrinho'][$key]);
+        // Reindexa o array para evitar buracos nos índices
+        $_SESSION['carrinho'] = array_values($_SESSION['carrinho']);
+      }
+    }
+    $this->redirect('carrinho/listar', ['msg' => 'Produto removido do carrinho']);
+  }
+  public function listar()
+  {
+    $produtos = [];
+    $total = 0;
+    if (isset($_SESSION['carrinho']) && is_array($_SESSION['carrinho'])) {
+      $Produtos = $this->model('Produtos');
+      foreach ($_SESSION['carrinho'] as $produtoId) {
+        $produto = $Produtos::buscarPorId($produtoId);
+        if ($produto) {
+          $produtos[] = $produto;
+          $total += isset($produto['preco']) ? $produto['preco'] : 0;
+        }
+      }
+    }
+    $this->view('carrinho/listar', [
+      'produtos' => $produtos,
+      'total' => $total
+    ]);
+  }
+
+  public function adicionar($id)
+  {
+    if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
+      $_SESSION['carrinho'] = [];
+    }
+    $_SESSION['carrinho'][] = $id;
+    $this->redirect('produto/detalhes/'.$id, ['msg' => 'Produto adicionado no carrinho']);
+  }
+
   public function index()
   {
-    $Enderecos = $this->model('Enderecos');
-    $listarEnd = $Enderecos::listarTudo();
-
     $Usuarios = $this->model('Usuarios');
     $listarUser = $Usuarios::listarTudo();
     
     $Carrinhos = $this->model('Carrinhos');
     $listarCar = $Carrinhos::listarTudo();
 
-
     $this->view('carrinho/index', [
-      'enderecos' => $listarEnd,
       'usuarios' => $listarUser, 
       'carrinhos' => $listarCar
 
@@ -39,9 +76,6 @@ class Carrinho extends Controller
     $usuario = $_POST['txt_usuario'];
     $endereco = $_POST['txt_endereco'];
     $Carrinhos = $this->model('Carrinhos');
-
-    //var_dump($_POST);
-    //exit;
 
     $Carrinhos::editar($id, $usuario, $endereco);
     $this->redirect('carrinho/index');

@@ -25,7 +25,6 @@ class Home extends Controller
 
     $this->redirect('home/index');
   }
-  
 
 }
  

@@ -1,0 +1,13 @@
+    body { 
+        background-color: #4744fcff; 
+    }
+    .icon-roxo-claro {
+      color: #84abffff ;
+    }
+    footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      z-index: 999;
+    }

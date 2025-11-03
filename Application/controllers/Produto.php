@@ -55,7 +55,6 @@ class Produto extends Controller
   }
    public function editar()
   {
-      // 1. Coleta os dados do formulário
       $id = $_POST['txt_id'];
       $id_categoria = $_POST['txt_categoria'];
       $nome = $_POST['txt_nome'];
@@ -65,23 +64,19 @@ class Produto extends Controller
       
       $nome_imagem = null;
 
-      // 2. Verifica se um novo arquivo de imagem foi enviado
       if (isset($_FILES['txt_imagem']) && $_FILES['txt_imagem']['error'] == UPLOAD_ERR_OK) {
           $imagem_temp = $_FILES['txt_imagem']['tmp_name'];
           $nome_imagem = uniqid() . '-' . basename($_FILES['txt_imagem']['name']);
           $caminho_destino = 'uploads/produto/' . $nome_imagem;
 
-          // Move o novo arquivo para a pasta de destino
           if (!move_uploaded_file($imagem_temp, $caminho_destino)) {
-              $nome_imagem = null; // Falha no upload, não atualiza a imagem
+              $nome_imagem = null;
           }
       }
 
-      // 3. Carrega o model e chama o método de edição
       $Produtos = $this->model('Produtos');
       $Produtos::editar($id, $id_categoria, $nome, $descricao, $preco, $quantidade, $nome_imagem);
-
-      // 4. Redireciona de volta para a lista de produtos
+      
       $this->redirect('produto/index');
   }  
 

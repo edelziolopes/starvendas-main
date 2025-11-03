@@ -6,16 +6,17 @@ use Application\core\Database;
 use PDO;
 class Compras
 {
-  public static function salvar($carrinho, $produto, $quantidade)
+  public static function salvar($carrinho, $produto, $preco, $quantidade)
   {
     $conn = new Database();
     $result = $conn->executeQuery(
         'INSERT INTO tb_compras 
-        (id_carrinho, id_produto, quantidade) 
-        VALUES (:CARRINHO, :PRODUTO, :QUANTIDADE)',
+        (id_carrinho, id_produto, preco, quantidade) 
+        VALUES (:CARRINHO, :PRODUTO, :PRECO, :QUANTIDADE)',
         array(
           ':CARRINHO' => $carrinho,
           ':PRODUTO' => $produto,
+          ':PRECO' => $preco,
           ':QUANTIDADE' => $quantidade
           )                                                           
     );
@@ -33,7 +34,7 @@ class Compras
   public static function listarTudo()
   {
       $conn = new Database();
-      $result = $conn->executeQuery('SELECT c.id, u.nome, p.nome as produto, c.quantidade FROM tb_compras c JOIN tb_usuarios u ON u.id=u.id JOIN tb_produtos p ON p.id=c.id_produto;');
+      $result = $conn->executeQuery('SELECT c.id, u.nome, p.nome as produto, c.quantidade FROM tb_compras c JOIN tb_usuarios u ON c.id=c.id JOIN tb_produtos p ON p.id=c.id_produto;');
       return $result->fetchAll(PDO::FETCH_ASSOC);
   }
   public static function editar($id,$carrinho, $produto, $preco, $quantidade)
@@ -43,11 +44,13 @@ class Compras
         'UPDATE tb_compras
         SET id_carrinho = :CARRINHO,
             id_produto = :PRODUTO,
+            preco = :PRECO,
             quantidade = :QUANTIDADE
         WHERE id = :ID',
         array(
             ':CARRINHO' => $carrinho,
             ':PRODUTO' => $produto,
+            ':PRECO' => $preco,
             ':QUANTIDADE' => $quantidade,
         )
     );
@@ -55,12 +58,14 @@ class Compras
         'UPDATE tb_compras
         SET id_carrinho = :CARRINHO,
             id_produto = :PRODUTO,
+            preco = :PRECO,
             quantidade = :QUANTIDADE
         WHERE id = :ID';
         $params = array(
             ':ID' => $id,
             ':CARRINHO' => $carrinho,
             ':PRODUTO' => $produto,
+            ':PRECO' => $preco,
             ':QUANTIDADE' => $quantidade,
         );
     return $result->rowCount();

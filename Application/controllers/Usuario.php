@@ -16,6 +16,8 @@ class Usuario extends Controller
     $email = $_POST['txt_email'];
     $senha = $_POST['txt_senha'];
     $foto = $_FILES['txt_foto'];
+    $tipo = $_POST['txt_tipo'];
+    $endereco = $_POST['txt_endereco'];
 
     $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
@@ -24,17 +26,54 @@ class Usuario extends Controller
     $uploadPath = '../public/uploads/foto/' . $fotoName;
      if (move_uploaded_file($foto['tmp_name'], $uploadPath)) {
       $usuarios = $this->model('Usuarios');
-      $usuarios::salvar($nome, $email, $senhaHash, $fotoName);
+      $usuarios::salvar($nome, $email, $senhaHash, $fotoName, $tipo, $endereco);
       $this->redirect('usuario/index');
     }
   }
+## ✨ Função `salvar_alteracao()` Sem Comentários
 
-  public function salvar_cadastrar()
+public function salvar_alteracao()
+  {
+      $id = $_POST['txt_id'] ?? null;
+      $nome = $_POST['txt_nome'] ?? null;
+      $email = $_POST['txt_email'] ?? null;
+      $senha = $_POST['txt_senha'] ?? null;
+      $foto = $_FILES['txt_foto'] ?? null; 
+
+      $senhaHash = !empty($senha) ? password_hash($senha, PASSWORD_DEFAULT) : null;
+
+      $fotoName = null;
+      $uploadSucesso = false;
+
+      if ($foto && $foto['error'] === UPLOAD_ERR_OK) {
+          $timestamp = date('YmdHis');
+          $fotoName = $timestamp . '.jpg';
+          $uploadPath = '../public/uploads/foto/' . $fotoName;
+
+          if (move_uploaded_file($foto['tmp_name'], $uploadPath)) {
+              $uploadSucesso = true;
+          }
+      }
+
+      try {
+          $usuarios = $this->model('Usuarios');
+          $usuarios::salvar_alteracao($id, $nome, $email, $senhaHash, $fotoName);
+          
+          $this->redirect('usuario/index');
+
+      } catch (\Exception $e) {
+          $this->redirect('usuario/index');
+      }
+  }
+
+  public function cadastrar()
   {
     $nome = $_POST['txt_nome'];
     $email = $_POST['txt_email'];
     $senha = $_POST['txt_senha'];
     $foto = $_FILES['txt_foto'];
+
+    //print_r($nome . ' ' . $email . ' ' . $senha . ' ' . $foto['name'] . ' ' . $endereco);exit();
 
     $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
@@ -84,22 +123,7 @@ class Usuario extends Controller
         $this->view('usuario/entrar');
     }
 } 
-public function cadastros()
-  {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $nome = $_POST['txt_nome'];
-      $email = $_POST['txt_email'];
-      $senha = $_POST['txt_senha'];
-      $foto = $_POST['txt_foto'] ?? null;
 
-      $Usuarios = $this->model('Usuarios');
-      $Usuarios::salvar($nome, $email, $senha, $foto);
-
-      $this->redirect('usuario/entar');
-      return;
-    }
-    $this->view('usuario/cadastros');
-  }
 
     public function sair()
   {
@@ -108,79 +132,96 @@ public function cadastros()
       session_destroy();
       $this->redirect('/home');
   }
-  public function editar_1()
-  {
-      $id = $_POST['txt_id'];
-      $nome = $_POST['txt_nome'];
-      $email = $_POST['txt_email'];
-      $senha = $_POST['txt_senha'];
-
-      // 1. Verificação da foto
-      if (isset($_FILES['txt_foto']) && $_FILES['txt_foto']['error'] === UPLOAD_ERR_OK) {
-          $foto = $_FILES['txt_foto'];
-          $fotoOk = true;
-          
-          // 1.1. Processamento e upload da foto (Apenas se fotoOk for true)
-          $timestamp = date('YmdHis');
-          $fotoName = $timestamp . '.jpg';
-          $uploadPath = '../public/uploads/foto/' . $fotoName;
-          move_uploaded_file($foto['tmp_name'], $uploadPath);
-      } else {
-          $fotoOk = false;
-          $fotoName = null; // Garante que a variável exista, mas com valor nulo
-      }
-
-      // 2. Processamento da senha (Apenas se o campo não estiver vazio)
-      $senhaHash = !empty($senha) ? password_hash($senha, PASSWORD_DEFAULT) : null;
-
-      // 3. Chamada ÚNICA ao Model
-      $Usuarios = $this->model('Usuarios');
-      // Passamos todos os dados. A lógica de qual SQL rodar fica no Model.
-      $Usuarios::editar($id, $fotoName, $nome, $email, $senhaHash); 
-
-      // 4. Atualização da sessão (Considerando que a fotoName só é definida se uma nova for enviada)
-      if ($fotoName !== null) {
-          $_SESSION['usuario_logado']->foto = $fotoName;
-      }
-      $_SESSION['usuario_logado']->nome = $nome;
-      $_SESSION['usuario_logado']->email = $email;
-
-      $this->redirect('usuario/index/' . $id . '?msg=Perfil atualizado com sucesso.');
-  }
   public function editar()
   {
+      // 1. Coleta dos dados do formulário
       $id = $_POST['txt_id'];
       $nome = $_POST['txt_nome'];
       $email = $_POST['txt_email'];
       $senha = $_POST['txt_senha'];
+      
+      $fotoName = null;
+      $fotoOk = false;
 
-      // 1. Verificação da foto
+      // 2. Processamento da foto (se enviada)
       if (isset($_FILES['txt_foto']) && $_FILES['txt_foto']['error'] === UPLOAD_ERR_OK) {
           $foto = $_FILES['txt_foto'];
           $fotoOk = true;
           
+          // Gera um nome único para o arquivo para evitar sobreposições
           $timestamp = date('YmdHis');
-          $fotoName = $timestamp . '.jpg';
+          $fotoName = $timestamp . '_' . basename($foto['name']); // Adicionado basename para segurança
           $uploadPath = '../public/uploads/foto/' . $fotoName;
+          
           move_uploaded_file($foto['tmp_name'], $uploadPath);
-      } else {
-          $fotoOk = false;
-          $fotoName = null;
       }
 
+      // 3. Processamento da senha (se preenchida)
+      // Se a senha estiver vazia, $senhaHash será null.
       $senhaHash = !empty($senha) ? password_hash($senha, PASSWORD_DEFAULT) : null;
-      
-      $Usuarios = $this->model('Usuarios');
-      $Usuarios::editar($id, $nome, $fotoName, $email, $senhaHash);
 
-      // 4. Atualização da sessão (Considerando que a fotoName só é definida se uma nova for enviada)
-      if ($fotoName !== null) {
+      // 4. Chamada ao Model para executar a atualização no banco de dados
+      $Usuarios = $this->model('Usuarios');
+      $Usuarios::editar($id, $fotoName, $nome, $email, $senhaHash, $fotoOk, $endereco); 
+
+      // 5. Atualização dos dados da sessão do usuário logado
+      // Apenas atualiza a foto na sessão se uma nova foi enviada
+      if ($fotoOk) {
+          // Se houver uma foto antiga, você pode querer deletá-la aqui
+          // unlink('../public/uploads/foto/' . $_SESSION['usuario_logado']->foto);
           $_SESSION['usuario_logado']->foto = $fotoName;
       }
       $_SESSION['usuario_logado']->nome = $nome;
       $_SESSION['usuario_logado']->email = $email;
 
+      // 6. Redirecionamento com mensagem de sucesso
+      $this->redirect('usuario/index');
+  }
+  public function editar_perfil()
+  {
+      // 1. Coleta dos dados do formulário
+      $id = $_POST['txt_id'];
+      $nome = $_POST['txt_nome'];
+      $email = $_POST['txt_email'];
+      $senha = $_POST['txt_senha'];
+      
+      $fotoName = null;
+      $fotoOk = false;
+
+      // 2. Processamento da foto (se enviada)
+      if (isset($_FILES['txt_foto']) && $_FILES['txt_foto']['error'] === UPLOAD_ERR_OK) {
+          $foto = $_FILES['txt_foto'];
+          $fotoOk = true;
+          
+          // Gera um nome único para o arquivo para evitar sobreposições
+          $timestamp = date('YmdHis');
+          $fotoName = $timestamp . '_' . basename($foto['name']); // Adicionado basename para segurança
+          $uploadPath = '../public/uploads/foto/' . $fotoName;
+          
+          move_uploaded_file($foto['tmp_name'], $uploadPath);
+      }
+
+      // 3. Processamento da senha (se preenchida)
+      // Se a senha estiver vazia, $senhaHash será null.
+      $senhaHash = !empty($senha) ? password_hash($senha, PASSWORD_DEFAULT) : null;
+
+      // 4. Chamada ao Model para executar a atualização no banco de dados
+      $Usuarios = $this->model('Usuarios');
+      $Usuarios::editar($id, $fotoName, $nome, $email, $senhaHash, $fotoOk); 
+
+      // 5. Atualização dos dados da sessão do usuário logado
+      // Apenas atualiza a foto na sessão se uma nova foi enviada
+      if ($fotoOk) {
+          // Se houver uma foto antiga, você pode querer deletá-la aqui
+          // unlink('../public/uploads/foto/' . $_SESSION['usuario_logado']->foto);
+          $_SESSION['usuario_logado']->foto = $fotoName;
+      }
+      $_SESSION['usuario_logado']->nome = $nome;
+      $_SESSION['usuario_logado']->email = $email;
+
+      // 6. Redirecionamento com mensagem de sucesso
       $this->redirect('usuario/perfil/' . $id . '?msg=Perfil atualizado com sucesso.');
   }
+
   
 }

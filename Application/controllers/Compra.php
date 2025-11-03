@@ -30,7 +30,7 @@ class Compra extends Controller
     $quantidade = $_POST['txt_quantidade'];
 
     $Compras = $this->model('Compras');
-    $Compras::salvar($carrinho, $produto, $quantidade);
+    $Compras::salvar($carrinho, $produto, $preco, $quantidade);
 
     $this->redirect('compra/index');
   }
@@ -45,13 +45,14 @@ class Compra extends Controller
     $id = $_POST['txt_id'];
     $carrinho = $_POST['txt_carrinho'];
     $produto = $_POST['txt_produto'];
+    $preco = $_POST['txt_preco'];
     $quantidade = $_POST['txt_quantidade'];
     $Compras = $this->model('Compras');
 
     //var_dump($_POST);
     //exit;
 
-    $Compras::editar($id, $carrinho, $produto, $quantidade);
+    $Compras::editar($id, $carrinho, $produto,$preco, $quantidade);
     $this->redirect('compra/index');
   }
 }
