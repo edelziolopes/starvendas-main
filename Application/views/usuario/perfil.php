@@ -94,7 +94,7 @@ $image_url = $base_image_path . $user_photo;
                 <!-- Tipo de Usuário (Badge) -->
                 <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full 
                             bg-badge-bg text-badge-text mb-6 uppercase tracking-wider">
-                    <?= htmlspecialchars($data['usuario'][0]['tipo'] ?? 'Usuário Padrão') ?>
+                    <?php if($data['usuario'][0]['tipo']!= 1){ echo 'Usuário Padrão'; } else { echo 'Administrador'; }  ?>
                 </span>
                 
                 <!-- Campos de Edição -->

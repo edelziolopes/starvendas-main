@@ -82,7 +82,25 @@ public static function salvar_alteracao($id, $nome, $email, $senhaHash, $fotoNam
       SELECT * FROM tb_usuarios WHERE id=:ID', array(':ID' => $id));
       return $result->fetchAll(PDO::FETCH_ASSOC);
   }
+  public static function listarCreditos($id)
+  {
+      $conn = new Database();
+      $result = $conn->executeQuery('
+      SELECT nome, creditos FROM tb_usuarios WHERE id=:ID', array(':ID' => $id));
+      return $result->fetchAll(PDO::FETCH_ASSOC);
+  }
   public static function buscarPorEmail($email)
+  {
+      $conn = new Database();
+      $result = $conn->executeQuery(
+          'SELECT id, nome, email, senha, foto, tipo FROM tb_usuarios WHERE email = :EMAIL',
+          array(
+              ':EMAIL' => $email
+          )
+      );
+      return $result->fetch(PDO::FETCH_OBJ);
+  }  
+  public static function entrar($email, $senha)
   {
       $conn = new Database();
       $result = $conn->executeQuery(
@@ -91,8 +109,12 @@ public static function salvar_alteracao($id, $nome, $email, $senhaHash, $fotoNam
               ':EMAIL' => $email
           )
       );
-      return $result->fetch(PDO::FETCH_OBJ);
-  }  
+      $usuario = $result->fetch(PDO::FETCH_OBJ);
+      if ($usuario && password_verify($senha, $usuario->senha)) {
+          return $usuario;
+      }
+      return null;
+  }
     public static function editar($id, $foto, $nome, $email, $senha, $novaFotoEnviada)
     {
         // 1. Inicia a query SQL base com os campos obrigatórios (nome e email)

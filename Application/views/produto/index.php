@@ -30,6 +30,23 @@
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
         }
+
+        /* --- Estilos do Carrossel --- */
+        .carousel-container {
+            overflow-x: scroll; 
+            scroll-snap-type: x mandatory; 
+            -webkit-overflow-scrolling: touch; 
+            scrollbar-width: none; 
+        }
+
+        .carousel-container::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .carousel-item {
+            scroll-snap-align: center; 
+            flex-shrink: 0; 
+        }
     </style>
 
     <script>
@@ -66,16 +83,27 @@
                     
                     <?php
                     // Helper para gerar um campo de input/select padronizado
-                    function render_form_field($label, $icon, $id, $name, $type = 'text', $placeholder = null, $required = true, $options = [], $step = null) {
-                        $required_attr = $required ? 'required' : '';
-                        $placeholder_attr = $placeholder ? "placeholder=\"$placeholder\"" : '';
-                        $step_attr = $step ? "step=\"$step\"" : '';
-                        
-                        echo "<div class='flex flex-col sm:flex-row items-start sm:items-center space-y-1 sm:space-y-0 sm:space-x-4'>";
-                        
-                        // Label (w-full sm:w-40 flex-shrink-0)
-                        echo "<label for='$id' class='flex items-center text-lg text-gray-700 font-medium w-full sm:w-40'>";
-                        echo "<i class=\"$icon mr-2 text-primary-purple\"></i> $label";
+                    function render_form_field($label, $icon, $id, $name, $type = 'text', $placeholder = null, $required = true, $options = [], $step = null, $multiple = false) {
+                    // Mantenha as suas linhas de código originais, mas adicione este isset/default check
+                    // Se o seu PHP estiver reclamando do argumento $multiple no escopo interno da função.
+                    if (!isset($multiple)) {
+                        $multiple = false;
+                    }
+                    
+                    $required_attr = $required ? 'required' : '';
+                    $placeholder_attr = $placeholder ? "placeholder=\"$placeholder\"" : '';
+                    $step_attr = $step ? "step=\"$step\"" : '';
+                    
+                    // LINHA 90
+                    $multiple_attr = $multiple ? 'multiple' : ''; // Adiciona 'multiple' para arquivos
+                    // LINHA 91
+                    $array_name = $multiple ? '[]' : ''; // Adiciona '[]' para enviar múltiplos arquivos em um array
+
+                    echo "<div class='flex flex-col sm:flex-row items-start sm:items-center space-y-1 sm:space-y-0 sm:space-x-4'>";
+
+                    // Label (w-full sm:w-40 flex-shrink-0)
+                    echo "<label for='$id' class='flex items-center text-lg text-gray-700 font-medium w-full sm:w-40'>";
+                    echo "<i class=\"$icon mr-2 text-primary-purple\"></i> $label";
                         echo "</label>";
                         
                         // Input/Select (flex-grow)
@@ -199,6 +227,7 @@
                                 <!-- Botão Editar -->
                                 <button type="button" 
                                         class="text-blue-600 hover:text-blue-800 transition duration-150 p-2 rounded-lg hover:bg-blue-50 block sm:inline-block w-full sm:w-auto"
+                                        data-images-json='<?= $imagens_exemplo_json ?>' 
                                         onclick="openEditProductModal(
                                             <?= htmlspecialchars($produto['id']) ?>, 
                                             <?= htmlspecialchars($produto['id_categoria']) ?>, 
@@ -332,7 +361,7 @@
         
         // 2. Torna o modal visível
         editProductModal.classList.remove('hidden');
-        editProductModal.classList.add('flex'); // Usa flex para centralizar
+        editProductModal.classList.add('flex');
         
         // 3. Aplica a animação de entrada (após um pequeno delay para a transição funcionar)
         setTimeout(() => {
@@ -369,4 +398,4 @@
 
 </script>
 </body>
-</html>
+</html> 

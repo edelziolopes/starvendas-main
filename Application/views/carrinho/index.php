@@ -80,19 +80,15 @@
                     </select>
                 </div>
 
-                <!-- Campo Endereço -->
-                <div class="flex flex-col sm:flex-row sm:items-center mb-6 gap-2">
-                    <label for="id_endereco" class="flex items-center w-full sm:w-32 text-sm font-medium text-gray-700">
-                        <i class="fas fa-map-marker-alt w-4 mr-2 text-primary-purple"></i> Endereço
-                    </label>
-                    <select class="form-select flex-1 p-2 border border-gray-300 rounded-lg focus:ring-primary-purple focus:border-primary-purple transition duration-150 bg-white" 
-                            id="id_endereco" name="txt_endereco" required>
-                        <option value="" selected disabled>Selecione o endereço</option>
-                        <?php foreach ($data['enderecos'] as $dados): ?>
-                            <option value="<?= $dados['id'] ?>"><?= htmlspecialchars($dados['nome']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                 <div class="mb-4">
+                            <label for="edit-produto" class="block text-sm font-medium text-gray-700 mb-1">Produto</label>
+                            <select class="w-full border border-gray-300 p-2 rounded-lg focus:ring-primary-purple focus:border-primary-purple" id="edit-produto" name="txt_produto" required>
+                                <option value="" selected disabled>Selecione o produto</option>
+                                <?php foreach ($data['produtos'] as $dados): ?>
+                                <option value="<?= $dados['id'] ?>"><?= $dados['nome'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
                 <!-- Botões -->
                 <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
@@ -105,6 +101,8 @@
 
             </form>
         </div>
+
+        
 
         <!-- Cartão de Lista de Carrinhos -->
         <div class="bg-card-bg rounded-xl shadow-2xl p-6">

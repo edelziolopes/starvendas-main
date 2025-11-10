@@ -6,7 +6,7 @@
     <title>Login de Usuário</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome (Embora não usado neste snippet, é bom ter se o projeto precisar) -->
+    <!-- Font Awesome (para ícones) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Tailwind Configuration: Defining Custom Colors/Styles -->
@@ -18,83 +18,103 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        // Cores personalizadas baseadas no seu CSS original
-                        'primary-purple': '#9c27b0', // Cor principal do botão
-                        'primary-hover': '#2196f3',  // Cor de hover do botão
-                        'text-purple': '#5a2e91',   // Cor do título
-                        'card-bg': '#f8faff',        // Fundo do card
+                        'brand-purple-start': '#6B21A8', // roxo mais escuro
+                        'brand-purple-end': '#A855F7',   // roxo mais claro
+                        'brand-ring': '#C084FC',         // cor para o anel de foco
                     },
                 }
             }
         }
     </script>
     <style>
-        /* Gradiente de fundo do body, replicando o estilo original */
+        /* Gradiente de fundo do body */
         body {
             background: linear-gradient(135deg, #e3f2fd, #bbdefb, #e0d3f2, #f0e6ff);
             min-height: 100vh;
+            /* Adiciona uma sutil animação de fundo para modernidade */
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
-<body class="font-sans flex items-center justify-center min-h-screen">
+<body class="font-sans flex items-center justify-center min-h-screen p-4">
 
-<div class="mx-auto p-4 w-full max-w-sm">
-    <!-- Card principal, replicando .card e .shadow -->
-    <div class="bg-card-bg rounded-xl shadow-xl p-6">
-        <div class="card-body">
-            <!-- Título, replicando .card-title -->
-            <h5 class="text-2xl font-semibold text-text-purple mb-6 text-center">Login</h5>
-            
-            <form action="/usuario/entrar" method="post">
-                <!-- Alerta de erro (replicando .alert.alert-danger) -->
-                <?php if (isset($data['erro'])): ?>
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                        <?= htmlspecialchars($data['erro']) ?>
-                    </div>
-                <?php endif; ?>
-                
-                <!-- Campo Usuário -->
-                <div class="mb-4">
-                    <label for="txt_email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
-                    <input 
-                        type="text" 
-                        id="txt_email" 
-                        name="txt_email" 
-                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring-primary-purple focus:border-primary-purple transition duration-150" 
-                        required
-                    >
-                </div>
-                
-                <!-- Campo Senha -->
-                <div class="mb-6">
-                    <label for="txt_senha" class="block text-sm font-medium text-gray-700 mb-1">Senha:</label>
-                    <input 
-                        type="password" 
-                        id="txt_senha" 
-                        name="txt_senha" 
-                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring-primary-purple focus:border-primary-purple transition duration-150" 
-                        required
-                    >
-                </div>
-                
-                <!-- Botões (replicando .row e .col-6) -->
-                <div class="flex space-x-4">
-                    <!-- Botão Entrar -->
-                    <div class="w-1/2">
-                        <button type="submit" class="w-full px-4 py-2 bg-primary-purple text-white font-medium rounded-lg shadow-md hover:bg-primary-hover transition duration-150 text-sm">
-                            Entrar
-                        </button>
-                    </div>
-                    <!-- Botão Cadastra-se -->
-                    <div class="w-1/2">
-                        <!-- Usando a mesma classe de estilo do btn-primary, como no original -->
-                        <a href="/usuario/cadastro/" class="block text-center w-full px-4 py-2 bg-primary-purple text-white font-medium rounded-lg shadow-md hover:bg-primary-hover transition duration-150 text-sm">
-                            Cadastra-se
-                        </a>
-                    </div>
-                </div>
-            </form>
+<div class="mx-auto w-full max-w-sm">
+    <!-- Card principal com efeito glassmorphism suave -->
+    <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 
+                transform transition duration-500 hover:shadow-3xl border border-gray-100">
+        
+        <div class="text-center mb-8">
+            <!-- Ícone e Título -->
+            <i class="fas fa-lock text-brand-purple-start text-3xl mb-3"></i>
+            <h5 class="text-3xl font-extrabold text-gray-800">Login</h5>
+            <p class="text-gray-500 text-sm mt-1">Acesse sua conta</p>
         </div>
+        
+        <form action="/usuario/entrar" method="post">
+            <!-- Alerta de erro (replicando .alert.alert-danger) -->
+            <?php if (isset($data['erro'])): ?>
+                <div class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-xl relative mb-6 text-sm" role="alert">
+                    <?= htmlspecialchars($data['erro']) ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Campo Email -->
+            <div class="mb-4">
+                <label for="txt_email" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                <input 
+                    type="text" 
+                    id="txt_email" 
+                    name="txt_email" 
+                    class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-brand-ring focus:border-brand-purple-end transition duration-200 shadow-sm" 
+                    required
+                >
+            </div>
+            
+            <!-- Campo Senha -->
+            <div class="mb-6">
+                <label for="txt_senha" class="block text-sm font-medium text-gray-700 mb-2">Senha:</label>
+                <input 
+                    type="password" 
+                    id="txt_senha" 
+                    name="txt_senha" 
+                    class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-brand-ring focus:border-brand-purple-end transition duration-200 shadow-sm" 
+                    required
+                >
+            </div>
+            
+            <!-- Botões -->
+            <div class="flex space-x-4">
+                <!-- Botão Entrar (com gradiente e efeito hover) -->
+                <div class="w-1/2">
+                    <button 
+                        type="submit" 
+                        class="w-full px-4 py-3 text-white font-semibold rounded-xl shadow-lg 
+                                bg-gradient-to-r from-brand-purple-start to-brand-purple-end 
+                                hover:from-brand-purple-end hover:to-brand-purple-start 
+                                transform hover:scale-[1.03] transition duration-300 ease-in-out text-base">
+                        Entrar
+                    </button>
+                </div>
+                <!-- Botão Cadastra-se (como link com o mesmo estilo) -->
+                <div class="w-1/2">
+                    <a 
+                        href="/usuario/cadastro/" 
+                        class="block text-center w-full px-4 py-3 text-white font-semibold rounded-xl shadow-lg 
+                                bg-gradient-to-r from-brand-purple-start to-brand-purple-end 
+                                hover:from-brand-purple-end hover:to-brand-purple-start 
+                                transform hover:scale-[1.03] transition duration-300 ease-in-out text-base">
+                        Cadastra-se
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

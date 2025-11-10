@@ -97,6 +97,16 @@ public function salvar_alteracao()
       //print_r($data); exit();
       $this->view('usuario/perfil', ['usuario' => $data]);
     }
+    
+    public function creditos($id)
+    {
+      $Usuarios = $this->model('Usuarios');
+      $data = $Usuarios::listarCreditos($id);
+      //print_r($data); exit();
+      $this->view('usuario/creditos', ['creditos' => $data]);
+    }
+
+
   public function excluir($id)
   {
     $Usuarios = $this->model('Usuarios');

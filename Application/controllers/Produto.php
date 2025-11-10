@@ -48,9 +48,13 @@ class Produto extends Controller
   {
     $Produtos = $this->model('Produtos');
     $Produtos::detalhes($id);
+    
+    $Fotos = $this->model('Fotos');
+    $Fotos::listarPorProduto($id);
 
     $this->view('produto/detalhes', [
-      'produto' => $Produtos::detalhes($id)
+      'produto' => $Produtos::detalhes($id),
+      'fotos' => $Fotos::listarPorProduto($id)
     ]);
   }
    public function editar()
