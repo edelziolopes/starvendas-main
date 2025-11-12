@@ -5,6 +5,60 @@ use Application\core\Controller;
 class Carrinho extends Controller
 {
 
+public function index()
+    {
+
+        $itensDoCarrinho = []; 
+
+        if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
+            $itensDoCarrinho = $_SESSION['carrinho'];
+        }
+
+        $this->view('carrinho/index', ['carrinhoItens' => $itensDoCarrinho]);
+    }
+
+public function finalizar()
+    {
+        session_start();
+
+        if (!isset($_SESSION['usuario_logado'])) {
+            $this->redirect('usuario/entrar');
+            return;
+        }
+
+        if (!isset($_POST['produto_id']) || empty($_POST['produto_id'])) {
+            $this->redirect('carrinho/listar');
+            return;
+        }
+
+        $id_usuario = $_SESSION['usuario_logado']->id;
+
+        $produtos_ids = $_POST['produto_id'];
+        $produtos_quantidades = $_POST['produto_quantidade'];
+
+        $Compras = $this->model('Carrinhos');
+
+        foreach ($produtos_ids as $key => $id_produto) {
+            $quantidade = $produtos_quantidades[$key];
+            
+            if (empty($id_produto) || empty($quantidade)) {
+                continue;
+            }
+            
+            $Compras::finalizar($id_usuario, $id_produto, $quantidade);
+        }
+
+        unset($_SESSION['carrinho']);
+
+        $this->redirect('compra/sucesso');
+    }
+
+    public function sucesso()
+    {
+        $this->view('compra/sucesso'); 
+    }
+
+
   public function remover($id)
   {
     if (isset($_SESSION['carrinho']) && is_array($_SESSION['carrinho'])) {
@@ -46,20 +100,7 @@ class Carrinho extends Controller
     $this->redirect('produto/detalhes/'.$id, ['msg' => 'Produto adicionado no carrinho']);
   }
 
-  public function index()
-  {
-    $Usuarios = $this->model('Usuarios');
-    $listarUser = $Usuarios::listarTudo();
-    
-    $Carrinhos = $this->model('Carrinhos');
-    $listarCar = $Carrinhos::listarTudo();
 
-    $this->view('carrinho/index', [
-      'usuarios' => $listarUser, 
-      'carrinhos' => $listarCar
-
-    ]);
-  }
   public function salvar()
   {
     $usuario = $_POST['txt_usuario'];

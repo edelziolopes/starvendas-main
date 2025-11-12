@@ -101,13 +101,25 @@
         <div class="mt-8 bg-white rounded-xl shadow-2xl p-6 flex justify-between items-center border-t border-gray-100">
             <span class="text-2xl font-extrabold text-gray-800">
                 Total: R$ <?= htmlspecialchars(number_format($data['total'], 2, ',', '.')) ?>
-            </span>
-            <a href="/compra/finalizar" 
-               class="px-8 py-3 text-lg font-bold text-white bg-green-600 rounded-xl hover:bg-green-700 transition duration-200 shadow-xl focus:ring-4 focus:ring-green-300">
+            </span> 
+            <form action="/carrinho/finalizar" method="POST">
+                <?php 
+                    foreach ($produtosAgrupados as $item): 
+                ?>
+
+                <input type="hidden" name="produto_id[]" 
+                value="<?php echo $item['id']; ?>">
+                <input type="hidden" name="produto_quantidade[]" value="<?php echo $item['quantidade_carrinho']; ?>">
+
+                <?php endforeach;  ?>
+
+                <button type="submit" class="px-8 py-3 text-lg font-bold text-white bg-green-600 rounded-xl hover:bg-green-700 transition duration-200 shadow-xl focus:ring-4 focus:ring-green-300">
                 Finalizar Compra
-            </a>
+                </button>
+            </form>
         </div>
-        
+
+
     <?php else: ?>
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-6 rounded-lg my-8" role="alert">
             <p class="font-bold text-xl mb-1">Seu carrinho está vazio!</p>

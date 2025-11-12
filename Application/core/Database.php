@@ -6,10 +6,10 @@ use PDO;
 class Database extends PDO
 {
   // configuração do banco de dados
-  private $DB_NAME = 'ecommerce';
-  private $DB_USER = 'root';
-  private $DB_PASSWORD = '';
-  private $DB_HOST = '127.0.0.1';
+  private $DB_NAME = 'u945386344_ecommerce';
+  private $DB_USER = 'u945386344_ana';
+  private $DB_PASSWORD = 'Ind-2025';
+  private $DB_HOST = 'srv886.hstgr.io';
   private $DB_PORT = 3306;
 
   // armazena a conexão

@@ -23,6 +23,25 @@ class Compra extends Controller
 
     ]);
   }
+  public function finalizar()
+  {
+    $Produtos = $this->model('Produtos');
+    $listarProd = $Produtos::listarTudo();
+
+    $Compras = $this->model('Compras');
+    $listarCom = $Compras::listarTudo();
+    
+    $Carrinhos = $this->model('Carrinhos');
+    $listarCar = $Carrinhos::listarTudo();
+
+
+    $this->view('compra/finalizar', [
+      'produtos' => $listarProd,
+      'compras' => $listarCom, 
+      'carrinhos' => $listarCar
+
+    ]);
+  }
   public function salvar()
   {
     $carrinho = $_POST['txt_carrinho'];
@@ -54,5 +73,9 @@ class Compra extends Controller
 
     $Compras::editar($id, $carrinho, $produto,$preco, $quantidade);
     $this->redirect('compra/index');
+  }
+  public function sucesso()
+  {
+    $this->view('compra/sucesso');
   }
 }

@@ -47,7 +47,7 @@
     <?php if (!empty($data['creditos'])): ?>
     
     <!-- Card principal, replicando .card e .shadow -->
-    <div class="bg-card-bg rounded-xl shadow-2xl w-full transition duration-300">
+    <div class="bg-card-bg rounded-xl shadow-2xl w-full transition duration-300 text-black">
 
         <div class="p-6">
             <h2 class="text-2xl font-bold mb-4">Créditos do Usuário</h2>
@@ -59,9 +59,7 @@
             </ul>
         </div>
 
-        <a href="/usuario/depositar/" class="block text-center bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-primary-hover transition duration-300">
-            Depositar Créditos
-        </a>
+
 
         
 

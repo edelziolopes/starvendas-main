@@ -6,6 +6,27 @@ use Application\core\Database;
 use PDO;
 class Carrinhos
 {
+
+    public static function finalizar($id_usuario, $id_produto, $quantidade)
+    {
+        $conn = new Database();
+        
+        // Query SQL corrigida para usar a tb_venda e seus campos corretos
+        // O status é definido como 0 (padrão 'pendente', como no seu SQL)
+        $result = $conn->executeQuery(
+            'INSERT INTO tb_venda 
+             (id_usuario, id_produto, quantidade, status) 
+             VALUES (:ID_USUARIO, :ID_PRODUTO, :QUANTIDADE, 0)',
+            array(
+                ':ID_USUARIO' => $id_usuario,
+                ':ID_PRODUTO' => $id_produto,
+                ':QUANTIDADE' => $quantidade
+            )
+        );
+        
+        return $result->rowCount();
+    }
+
   public static function salvar($usuario, $endereco)
   {
     $conn = new Database();

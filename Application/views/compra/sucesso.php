@@ -1,0 +1,1 @@
+<h2 class="text-black">Compra realizada com sucesso! Consulte no banco de dados os detalhes da compra. Melhorar esse view</h2>

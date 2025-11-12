@@ -6,6 +6,21 @@ use Application\core\Database;
 use PDO;
 class Usuarios
 {
+
+    public static function abaterCreditos($id_usuario, $total_a_descontar)
+    {
+        $conn = new Database();
+        $result = $conn->executeQuery(
+            'UPDATE tb_usuarios 
+             SET creditos = creditos - :TOTAL
+             WHERE id = :ID',
+            array(
+                ':TOTAL' => $total_a_descontar,
+                ':ID' => $id_usuario
+            )
+        );
+        return $result->rowCount();
+    }
   public static function salvar($nome, $email, $senha, $foto, $tipo = 2)
   {
     $conn = new Database();

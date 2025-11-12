@@ -83,5 +83,34 @@ class Produto extends Controller
       
       $this->redirect('produto/index');
   }  
+  public static function buscarPorId($id)
+    {
+        $conn = new Database();
+        $result = $conn->executeQuery(
+            'SELECT * FROM tb_produtos WHERE id = :ID',
+            [':ID' => $id]
+        );
+        
+        // Retorna como array associativo
+        return $result->fetch(PDO::FETCH_ASSOC); 
+    }
+
+    /**
+     * Novo método: Subtrai a quantidade do estoque.
+     */
+    public static function abaterEstoque($id_produto, $quantidade_comprada)
+    {
+        $conn = new Database();
+        $result = $conn->executeQuery(
+            'UPDATE tb_produtos 
+             SET quantidade = quantidade - :QTD
+             WHERE id = :ID',
+            array(
+                ':QTD' => $quantidade_comprada,
+                ':ID' => $id_produto
+            )
+        );
+        return $result->rowCount();
+    }
 
 }

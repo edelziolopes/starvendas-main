@@ -84,7 +84,7 @@
                     type="password" 
                     id="txt_senha" 
                     name="txt_senha" 
-                    class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-brand-ring focus:border-brand-purple-end transition duration-200 shadow-sm" 
+                    class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-brand-ring focus:border-brand-purple-end transition duration-200 shadow-sm text-black" 
                     required
                 >
             </div>
