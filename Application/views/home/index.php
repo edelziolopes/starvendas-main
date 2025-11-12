@@ -9,20 +9,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudfcom/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   <style>
     :root {
       --color-primary: #6D28D9;
       --color-title: #6D28D9;
       --color-primary-hover: #2a056eff;
-      --color-card-bg: #ffffff;
-      --badge-bg-color: #E5D7FA;
+      --color-card-bg: #ffffffff;
+      --badge-bg-color: #ffffffff;
       --badge-text-color: #6D28D9;
     }
 
     body {
-      background-color: #ffffff;
+      background-color: 
+       bbbbb#000000ff;
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       color: #1f2937;

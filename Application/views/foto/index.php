@@ -22,9 +22,9 @@
                         'primary-purple': '#9c27b0', // Original .btn-primary default
                         'primary-hover': '#2196f3',  // Original .btn-primary hover
                         'text-purple': '#5a2e91',   // Original .card-title color
-                        'card-bg': '#f8faff',        // Original .card background
-                        'footer-bg': '#e6f0ff',      // Original .card-footer background
-                        'badge-bg': '#e0d3f2',       // Original .badge background
+                        'card-bg': '#ffffffff',        // Original .card background
+                        'footer-bg': '#ffffffff',      // Original .card-footer background
+                        'badge-bg': '#ffffffff',       // Original .badge background
                     },
                 }
             }
@@ -115,13 +115,13 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <?php foreach ($data['fotos'] as $dados): ?>
-                                <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                                <?php if (!empty($data['foto']) && is_array($data['foto'])): ?>
+                                <?php foreach ($data['foto'] as $dados): ?>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?= htmlspecialchars($dados['id']) ?></td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($dados['produto']) ?></td>>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($dados['foto']) ?></td>>
-                                    <td class="px-6 py-4 whitespacrap text-center text-sm font-medium">
-                                        <button class="text-primary-purple hover:text-primary-hover mr-2 transition duration-150" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?= $dados['id'] ?>" data-compra="<?= $dados['nome']?>" data-produto="<?= $dados['produto'] ?>" data-preco="<?= $dados['preco'] ?>" data-quantidade="<?= $dados['quantidade'] ?>">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($dados['produto']) ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($dados['foto']) ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center text-swm font-medium">
+                                        <button class="text-primary-purple hover:text-primary-hover mr-2 transition duration-150" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?= $dados['id'] ?>" data-produto="<?= $dados['produto'] ?>"data-foto=
                                             <i class="fas fa-edit"></i> Editar
                                         </button>
                                         <a href="/foto/excluir/<?= $dados['id'] ?>" class="text-red-600 hover:text-red-800 transition duration-150 mt-1 inline-flex items-center">
@@ -130,7 +130,13 @@
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
+                                <?php else: ?>
+                                <tr>
+                                    <td colspan="4" class="px-6 py-4 text-sm text-gray-500">Nenhuma foto encontrada.</td>
+                                </tr>
+                                <?php endif; ?>
                             </tbody>
+                        </table>
                         </table>
                     </div>
                 </div>

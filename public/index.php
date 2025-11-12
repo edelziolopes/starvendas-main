@@ -28,18 +28,20 @@ $rotasBootstrap = ['/', '/home', '/categoria', '/produto', '/usuario', '/enderec
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KEY lab</title>
+    <title>Key Lab</title>
     <?php inserirCssJs(); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body class="min-h-screen flex flex-col bg-white text-black">
+<body class="min-h-screen flex flex-col bg-white text-white">
 
 <nav class="bg-[#6D28D9] p-4 shadow-md">
   <div class="container mx-auto flex flex-wrap items-center justify-between">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-key-fill w-20 h-20" viewBox="0 0 16 16">
+      <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+</svg>
     <a class="text-white font-bold text-2xl tracking-wider" href="/">
-      <i class="fas fa-star mr-2"></i> KEY LAB 
-    </a>
+      <i class="bi bi-key-fill"></i>  KEY LAB
 
     <button id="navbar-toggle" class="lg:hidden text-white hover:text-gray-200 focus:outline-none" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="sr-only">Toggle navigation</span>
@@ -131,7 +133,7 @@ $rotasBootstrap = ['/', '/home', '/categoria', '/produto', '/usuario', '/enderec
 
 <footer class="text-white py-4 mt-8 bg-[#6D28D9] shadow-inner">
   <div class="container mx-auto text-center px-4">
-    &copy; 2025 Essência Joias. Todos os direitos reservados.
+    &copy; 2025 Key Lab. Todos os direitos reservados.
   </div>
 </footer>
 
